@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Text;
+using System.IO;
+
+namespace lb_2
+{
+    //Створити клас с атрибутами та конструктором.
+    //У методі main() ініціалізувати створення екземплярів класу
+    //та продемонструвати роботу його методів згідно умов завдання.
+
+    //Реалізуйте клас Працівник, який містить властивості:
+    //ім'я, прізвище, ставка за день роботи, кількість відпрацьованих днів.
+    //Також клас повинен мати метод, який буде виводити зарплату працівника.
+    //Зарплата - це добуток ставки на кількість відпрацьованих днів.
+
+     
+    [Serializable] // установили атрибут 
+    class Employeee
+    {   
+        //параметричний конструктор класу з параметрами
+        public Employeee(string hisname, int hisage, int hisdays, int hispayment)
+        {
+            this.name = hisname;
+            this.age = hisage;
+            this.days = hisdays;
+            this.payment = hispayment;
+        }
+
+        public string name { get; set; }
+        public int age { get; set; }
+        public int days { get; set; }
+        public int payment { get; set; }
+        public int money { get; set; }
+
+        public void reWrite()
+        {
+            Console.WriteLine($"Ім'я: {name}\nВік: {age}\nСтавка: {payment}\nКількість відпроцьованих діб: {days}\n");
+        }
+
+        public int Salary()
+        {
+            money = days * payment;
+            Console.WriteLine("Його заробітна плата: " + money);
+            return money;
+        }
+       
+        static void JSON(Employeee person)
+        {
+            var toJSON = JsonConvert.SerializeObject(person);
+            File.WriteAllText("/Users/vlodochka1/Desktop/laba 2.txt", toJSON);
+        }
+
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                Employeee he = new Employeee("Борис Джонсон", 57, 6000, 21);//виділення пам'яті, екземпляр класу, демонстрація використання
+                he.reWrite();
+                he.Salary();
+                JSON(he);
+
+                Deserializing();
+                Console.ReadLine();
+            }
+        }
+
+        static Employeee Deserializing()
+        {
+            string filespath = @"/Users/vlodochka1/Desktop/laba 2.txt";
+            if (File.Exists(filespath))
+            {
+                Console.WriteLine("Файл знайдено");
+                var Deserializedobj = JsonConvert.DeserializeObject<Employeee>(File.ReadAllText(filespath));
+                return Deserializedobj;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        
+    }
+
+}
